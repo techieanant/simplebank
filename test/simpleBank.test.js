@@ -46,17 +46,17 @@ contract('SimpleBank', function(accounts) {
   it("should withdraw correct amount", async () => {
     const bank = await SimpleBank.deployed();
     const initialAmount = 0;
-   
+
     await bank.withdraw(deposit, {from: alice});
     const balance = await bank.balance({from: alice});
-
+    
     assert.equal(balance.toString(), initialAmount.toString(), 'balance incorrect after withdrawal, check withdraw method');
 
     const LogWithdrawal = await bank.LogWithdrawal();
     const log = await new Promise(function(resolve, reject) {
       LogWithdrawal.watch(function(error, log){ resolve(log);});
     });
-    
+
     const accountAddress = log.args.accountAddress;
     const newBalance = log.args.newBalance.toNumber();
     const withdrawalAmount = log.args.withdrawAmount.toNumber();
