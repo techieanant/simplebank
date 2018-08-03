@@ -57,10 +57,10 @@ contract SimpleBank {
            Subtract the amount from the sender's balance, and try to send that amount of ether
            to the user attempting to withdraw. IF the send fails, add the amount back to the user's balance
            return the user's balance.*/
-           require(withdrawAmount < balances[msg.sender]);
-           balances[msg.sender] = balances[msg.sender] - withdrawAmount;
+           require(withdrawAmount <= balances[msg.sender]);
            msg.sender.transfer(withdrawAmount);
-           emit LogWithdrawal(msg.sender, withdrawAmount, balances[msg.sender]);     
+           balances[msg.sender] = balances[msg.sender] - withdrawAmount;
+           emit LogWithdrawal(msg.sender, withdrawAmount, balances[msg.sender]);
            return balance();
     }
 
@@ -78,7 +78,7 @@ contract SimpleBank {
     // Typically, called when invalid data is sent
     // Added so ether sent to this contract is reverted if the contract fails
     // otherwise, the sender's money is transferred to contract
-    function() {
+    function() public {
         revert();
     }
 }
